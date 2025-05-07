@@ -1,0 +1,52 @@
+% AIMD Simulation - Scenarios S3 & S4
+clear all; close all; clc;
+
+% Parameters
+W0 = 1;            % Initial window size
+simTime = 100;     
+dt = 0.01;         
+p = 0.01;          % Loss probability
+R = 1;             % Constant RTT
+
+% Scenario Definitions (S3=Red, S4=Blue)
+scenarios = {
+    struct('name', 'S3', 'alpha', 2.0, 'beta', 0.5, 'color', [0.9 0.1 0.1], 'linewidth', 2.0), % Red
+    struct('name', 'S4', 'alpha', 1.0, 'beta', 0.8, 'color', [0.1 0.3 0.9], 'linewidth', 2.0)  % Blue
+};
+
+% Create figure
+figure('Position', [100, 100, 1200, 700], 'Color', 'w');
+set(gca, 'FontSize', 14, 'GridLineStyle', '--');
+hold on; grid on;
+
+title('AIMD Comparison: S3 (Red) vs S4 (Blue)', 'FontSize', 18, 'FontWeight', 'bold');
+xlabel('Time (s)', 'FontSize', 16);
+ylabel('Window Size W(t)', 'FontSize', 16);
+
+% Simulation and Plotting
+for i = 1:length(scenarios)
+    sc = scenarios{i};
+    t = 0:dt:simTime;
+    W = zeros(size(t)); W(1) = W0;
+    
+    for n = 2:length(t)
+        if rand() < p
+            W(n) = sc.beta * W(n-1); % Multiplicative Decrease
+        else
+            W(n) = W(n-1) + (sc.alpha/R)*dt; % Additive Increase
+        end
+    end
+    
+    plot(t, W, 'Color', sc.color, 'LineWidth', sc.linewidth, 'DisplayName', ...
+        sprintf('%s (A=%.1f, B=%.1f)', sc.name, sc.alpha, sc.beta));
+end
+
+% Axis settings
+xlim([0 simTime]);
+ylim([0 15]); % Adjusted Y-axis range for these scenarios
+xticks(0:10:100);
+yticks(0:1:15);
+legend('Location', 'northeast', 'FontSize', 12, 'Box', 'off');
+
+% Reference line
+yline(7.5, '--', 'Reference', 'Color', [0.5 0.5 0.5], 'LineWidth', 1.0);
