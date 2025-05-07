@@ -1,4 +1,17 @@
-% AIMD Simulation - Scenarios S3 & S4
+% ============================================================
+% AIMD Window Size Simulation: S3 (Red) vs S4 (Blue)
+%
+% This script simulates Additive Increase Multiplicative Decrease (AIMD)
+% window behavior for two scenarios with distinct α (increase) and β (decrease)
+% parameters:
+%   - S3: α = 2.0, β = 0.5 (aggressive increase)
+%   - S4: α = 1.0, β = 0.8 (conservative decrease)
+%
+% The simulation runs over time with random packet loss events and
+% plots how the congestion window evolves under each configuration.
+% A horizontal reference line is included to visualize midpoint comparison.
+% ============================================================
+
 clear all; close all; clc;
 
 % Parameters
