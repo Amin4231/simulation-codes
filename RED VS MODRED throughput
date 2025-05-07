@@ -1,24 +1,38 @@
+% This code compares the performance of two congestion control algorithms: 
+% RED (Random Early Detection) and MODRED (Modified RED).
+% It plots two graphs:
+% 1. Throughput Comparison: Compares the throughput (packets per second) 
+%    of both RED and MODRED across different packet arrival rates (lambda).
+% 2. Loss Rate Comparison: Compares the loss rate (percentage) of both RED 
+%    and MODRED across the same packet arrival rates.
+% The purpose is to visualize how the throughput and loss rates change 
+% under varying packet arrival rates for both algorithms.
+
 % Use the final results from your table
-lambda_values = [10, 12, 14, 16];
-throughput_RED = [10.00, 11.09, 12.62, 13.68];
-throughput_MODRED = [10.00, 11.58, 13.02, 14.47];
-lossRate_RED = [0.00, 7.58, 9.86, 14.50];
-lossRate_MODRED = [0.00, 3.50, 6.98, 9.58];
+lambda_values = [10, 12, 14, 16];  % Lambda values representing packet arrival rates
+throughput_RED = [10.00, 11.09, 12.62, 13.68];  % Throughput for RED algorithm at different lambda values
+throughput_MODRED = [10.00, 11.58, 13.02, 14.47];  % Throughput for MODRED algorithm at different lambda values
+lossRate_RED = [0.00, 7.58, 9.86, 14.50];  % Loss rate for RED algorithm at different lambda values
+lossRate_MODRED = [0.00, 3.50, 6.98, 9.58];  % Loss rate for MODRED algorithm at different lambda values
 
 % Plot Throughput Comparison
-figure;
-bar(lambda_values, [throughput_RED; throughput_MODRED]');
-legend('RED', 'MODRED', 'Location', 'northwest');
-xlabel('Lambda (Packet Arrival Rate)');
-ylabel('Throughput (pkts/sec)');
-title('Throughput Comparison (RED vs MODRED)');
-grid on;
+figure;  % Create a new figure window
+% Create a bar plot for throughput comparison between RED and MODRED
+bar(lambda_values, [throughput_RED; throughput_MODRED]'); 
+% The 'bar' function plots bars for throughput values at each lambda value for both RED and MODRED
+legend('RED', 'MODRED', 'Location', 'northwest');  % Add a legend to label the two algorithms
+xlabel('Lambda (Packet Arrival Rate)');  % Label the x-axis
+ylabel('Throughput (pkts/sec)');  % Label the y-axis
+title('Throughput Comparison (RED vs MODRED)');  % Title for the plot
+grid on;  % Enable gridlines for better visibility
 
 % Plot Loss Rate Comparison
-figure;
-bar(lambda_values, [lossRate_RED; lossRate_MODRED]');
-legend('RED', 'MODRED', 'Location', 'northwest');
-xlabel('Lambda (Packet Arrival Rate)');
-ylabel('Loss Rate (%)');
-title('Loss Rate Comparison (RED vs MODRED)');
-grid on;
+figure;  % Create a new figure window
+% Create a bar plot for loss rate comparison between RED and MODRED
+bar(lambda_values, [lossRate_RED; lossRate_MODRED]'); 
+% The 'bar' function plots bars for loss rates at each lambda value for both RED and MODRED
+legend('RED', 'MODRED', 'Location', 'northwest');  % Add a legend to label the two algorithms
+xlabel('Lambda (Packet Arrival Rate)');  % Label the x-axis
+ylabel('Loss Rate (%)');  % Label the y-axis
+title('Loss Rate Comparison (RED vs MODRED)');  % Title for the plot
+grid on;  % Enable gridlines for better visibility
