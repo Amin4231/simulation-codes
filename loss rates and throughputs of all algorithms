@@ -1,3 +1,21 @@
+% Simulation: RED, MODRED, and AIMD Performance under Low and High RTT
+%
+% This script simulates network throughput and packet loss rate
+% for three congestion control algorithms: RED, MODRED, and AIMD.
+%
+% The simulation runs over a series of time steps and introduces 
+% periodic packet loss events. It considers two RTT scenarios:
+%   - Low RTT
+%   - High RTT
+%
+% The script produces four plots:
+%   1. Throughput over time under Low RTT
+%   2. Loss rate over time under Low RTT
+%   3. Throughput over time under High RTT
+%   4. Loss rate over time under High RTT
+%
+% At the end, it prints average performance metrics for each case.
+
 clear; clc; close all;
 
 % Simulation Parameters
@@ -27,25 +45,18 @@ loss_RED = 2;
 loss_MODRED = 1.5; 
 loss_AIMD = 1.2;
 
-% Simulate Low RTT scenario
-% Base values for Low RTT remain unchanged
-
 % Simulate over time for Low RTT
 for t = 1:time_steps
-    % Add noise to simulate network fluctuation
-    fluctuation = 1 + 0.05 * randn();
+    fluctuation = 1 + 0.05 * randn();  % Add noise
 
-    % Apply base throughput
     RED_throughput_lowRTT(t) = base_RED * fluctuation;
     MODRED_throughput_lowRTT(t) = base_MODRED * fluctuation;
     AIMD_throughput_lowRTT(t) = base_AIMD * fluctuation;
 
-    % Apply base loss
     RED_loss_lowRTT(t) = loss_RED;
     MODRED_loss_lowRTT(t) = loss_MODRED;
     AIMD_loss_lowRTT(t) = loss_AIMD;
 
-    % Apply packet loss every 20 steps
     if mod(t, loss_interval) == 0
         RED_throughput_lowRTT(t) = RED_throughput_lowRTT(t) * 0.5;
         MODRED_throughput_lowRTT(t) = MODRED_throughput_lowRTT(t) * 0.5;
@@ -57,30 +68,26 @@ for t = 1:time_steps
     end
 end
 
-% Adjust values for High RTT scenario
-base_RED = 50 - 10;
-base_MODRED = 55 - 10;
-base_AIMD = 60 - 22;
-loss_RED = 2 + 2;
-loss_MODRED = 1.5 + 2;
-loss_AIMD = 1.2 + 3;
+% Adjust base values for High RTT
+base_RED = 40;
+base_MODRED = 45;
+base_AIMD = 38;
+loss_RED = 4;
+loss_MODRED = 3.5;
+loss_AIMD = 4.2;
 
 % Simulate over time for High RTT
 for t = 1:time_steps
-    % Add noise to simulate network fluctuation
-    fluctuation = 1 + 0.05 * randn();
+    fluctuation = 1 + 0.05 * randn();  % Add noise
 
-    % Apply base throughput
     RED_throughput_highRTT(t) = base_RED * fluctuation;
     MODRED_throughput_highRTT(t) = base_MODRED * fluctuation;
     AIMD_throughput_highRTT(t) = base_AIMD * fluctuation;
 
-    % Apply base loss
     RED_loss_highRTT(t) = loss_RED;
     MODRED_loss_highRTT(t) = loss_MODRED;
     AIMD_loss_highRTT(t) = loss_AIMD;
 
-    % Apply packet loss every 20 steps
     if mod(t, loss_interval) == 0
         RED_throughput_highRTT(t) = RED_throughput_highRTT(t) * 0.5;
         MODRED_throughput_highRTT(t) = MODRED_throughput_highRTT(t) * 0.5;
