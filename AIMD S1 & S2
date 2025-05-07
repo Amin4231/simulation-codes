@@ -1,4 +1,16 @@
-% AIMD Simulation - S1 (Red) vs S2 (Blue) ONLY
+% AIMD Window Size Simulation: S1 (RED) vs S2 (BLUE)
+%
+% This MATLAB script simulates Additive Increase Multiplicative Decrease (AIMD)
+% behavior under two scenarios:
+%   - S1: RED (α = 0.5, β = 0.3, red color)
+%   - S2: BLUE (α = 1.0, β = 0.5, blue color)
+%
+% The simulation models the evolution of TCP congestion window size (W)
+% over time, using AIMD dynamics and a random packet loss model.
+%
+% The results are plotted to visually compare how each scenario responds
+% to increasing and decreasing the window under packet loss events.
+
 clear all; close all; clc;
 
 % Basic Parameters
@@ -10,8 +22,8 @@ R = 1;             % Constant RTT
 
 % Scenario Definitions (ONLY S1 and S2)
 scenarios = [
-    struct('name', 'S1', 'alpha', 0.5, 'beta', 0.3, 'color', [1 0 0], 'linewidth', 3)  % Pure RED
-    struct('name', 'S2', 'alpha', 1.0, 'beta', 0.5, 'color', [0 0 1], 'linewidth', 3)  % Pure BLUE
+    struct('name', 'S1', 'alpha', 0.5, 'beta', 0.3, 'color', [1 0 0], 'linewidth', 3)  % RED
+    struct('name', 'S2', 'alpha', 1.0, 'beta', 0.5, 'color', [0 0 1], 'linewidth', 3)  % BLUE
 ];
 
 % Create figure
@@ -32,9 +44,9 @@ for i = 1:2  % ONLY first two scenarios
     
     for n = 2:length(t)
         if rand() < p
-            W(n) = sc.beta * W(n-1);  % Decrease
+            W(n) = sc.beta * W(n-1);  % Decrease (Multiplicative)
         else
-            W(n) = W(n-1) + (sc.alpha/R)*dt;  % Increase
+            W(n) = W(n-1) + (sc.alpha/R)*dt;  % Increase (Additive)
         end
     end
     
@@ -45,7 +57,7 @@ end
 
 % Axis Settings
 ax.XLim = [0 simTime];
-ax.YLim = [0 25];  % Increased Y-scale
+ax.YLim = [0 25];  % Increased Y-scale for better visibility
 ax.FontSize = 14;
 ax.GridColor = [0.8 0.8 0.8];
 ax.MinorGridLineStyle = '-';
