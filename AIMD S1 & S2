@@ -1,0 +1,58 @@
+% AIMD Simulation - S1 (Red) vs S2 (Blue) ONLY
+clear all; close all; clc;
+
+% Basic Parameters
+W0 = 1;            % Initial window size
+simTime = 100;     
+dt = 0.01;         
+p = 0.01;          % Loss probability
+R = 1;             % Constant RTT
+
+% Scenario Definitions (ONLY S1 and S2)
+scenarios = [
+    struct('name', 'S1', 'alpha', 0.5, 'beta', 0.3, 'color', [1 0 0], 'linewidth', 3)  % Pure RED
+    struct('name', 'S2', 'alpha', 1.0, 'beta', 0.5, 'color', [0 0 1], 'linewidth', 3)  % Pure BLUE
+];
+
+% Create figure
+figure('Position', [50 50 1400 800], 'Color', 'w');
+ax = gca;
+hold on; grid on;
+
+% Title and Labels
+title('AIMD: S1 (RED) vs S2 (BLUE)', 'FontSize', 20, 'FontWeight', 'bold');
+xlabel('Time (s)', 'FontSize', 16);
+ylabel('Window Size W(t)', 'FontSize', 16);
+
+% Simulation
+for i = 1:2  % ONLY first two scenarios
+    sc = scenarios(i);
+    t = 0:dt:simTime;
+    W = zeros(size(t)); W(1) = W0;
+    
+    for n = 2:length(t)
+        if rand() < p
+            W(n) = sc.beta * W(n-1);  % Decrease
+        else
+            W(n) = W(n-1) + (sc.alpha/R)*dt;  % Increase
+        end
+    end
+    
+    % Plot with enhanced visibility
+    plot(t, W, 'Color', sc.color, 'LineWidth', sc.linewidth, ...
+        'DisplayName', sprintf('%s (α=%.1f, β=%.1f)', sc.name, sc.alpha, sc.beta));
+end
+
+% Axis Settings
+ax.XLim = [0 simTime];
+ax.YLim = [0 25];  % Increased Y-scale
+ax.FontSize = 14;
+ax.GridColor = [0.8 0.8 0.8];
+ax.MinorGridLineStyle = '-';
+
+% Legend
+legend('Location', 'northeast', 'FontSize', 14, 'Box', 'off');
+
+% Custom Ticks
+xticks(0:10:100);
+yticks(0:5:25);
