@@ -1,0 +1,24 @@
+% Use the final results from your table
+lambda_values = [10, 12, 14, 16];
+throughput_RED = [10.00, 11.09, 12.62, 13.68];
+throughput_MODRED = [10.00, 11.58, 13.02, 14.47];
+lossRate_RED = [0.00, 7.58, 9.86, 14.50];
+lossRate_MODRED = [0.00, 3.50, 6.98, 9.58];
+
+% Plot Throughput Comparison
+figure;
+bar(lambda_values, [throughput_RED; throughput_MODRED]');
+legend('RED', 'MODRED', 'Location', 'northwest');
+xlabel('Lambda (Packet Arrival Rate)');
+ylabel('Throughput (pkts/sec)');
+title('Throughput Comparison (RED vs MODRED)');
+grid on;
+
+% Plot Loss Rate Comparison
+figure;
+bar(lambda_values, [lossRate_RED; lossRate_MODRED]');
+legend('RED', 'MODRED', 'Location', 'northwest');
+xlabel('Lambda (Packet Arrival Rate)');
+ylabel('Loss Rate (%)');
+title('Loss Rate Comparison (RED vs MODRED)');
+grid on;
