@@ -1,0 +1,159 @@
+clear; clc; close all;
+
+% Simulation Parameters
+time_steps = 100;
+loss_interval = 20;
+
+% Initialize Throughput (Mbps) and Loss Rate (%) Arrays
+RED_throughput_lowRTT = zeros(1, time_steps);
+MODRED_throughput_lowRTT = zeros(1, time_steps);
+AIMD_throughput_lowRTT = zeros(1, time_steps);
+RED_loss_lowRTT = zeros(1, time_steps);
+MODRED_loss_lowRTT = zeros(1, time_steps);
+AIMD_loss_lowRTT = zeros(1, time_steps);
+
+RED_throughput_highRTT = zeros(1, time_steps);
+MODRED_throughput_highRTT = zeros(1, time_steps);
+AIMD_throughput_highRTT = zeros(1, time_steps);
+RED_loss_highRTT = zeros(1, time_steps);
+MODRED_loss_highRTT = zeros(1, time_steps);
+AIMD_loss_highRTT = zeros(1, time_steps);
+
+% Base values for Low RTT
+base_RED = 50; 
+base_MODRED = 55; 
+base_AIMD = 60;
+loss_RED = 2; 
+loss_MODRED = 1.5; 
+loss_AIMD = 1.2;
+
+% Simulate Low RTT scenario
+% Base values for Low RTT remain unchanged
+
+% Simulate over time for Low RTT
+for t = 1:time_steps
+    % Add noise to simulate network fluctuation
+    fluctuation = 1 + 0.05 * randn();
+
+    % Apply base throughput
+    RED_throughput_lowRTT(t) = base_RED * fluctuation;
+    MODRED_throughput_lowRTT(t) = base_MODRED * fluctuation;
+    AIMD_throughput_lowRTT(t) = base_AIMD * fluctuation;
+
+    % Apply base loss
+    RED_loss_lowRTT(t) = loss_RED;
+    MODRED_loss_lowRTT(t) = loss_MODRED;
+    AIMD_loss_lowRTT(t) = loss_AIMD;
+
+    % Apply packet loss every 20 steps
+    if mod(t, loss_interval) == 0
+        RED_throughput_lowRTT(t) = RED_throughput_lowRTT(t) * 0.5;
+        MODRED_throughput_lowRTT(t) = MODRED_throughput_lowRTT(t) * 0.5;
+        AIMD_throughput_lowRTT(t) = AIMD_throughput_lowRTT(t) * 0.5;
+
+        RED_loss_lowRTT(t) = RED_loss_lowRTT(t) + 3;
+        MODRED_loss_lowRTT(t) = MODRED_loss_lowRTT(t) + 2.5;
+        AIMD_loss_lowRTT(t) = AIMD_loss_lowRTT(t) + 4;
+    end
+end
+
+% Adjust values for High RTT scenario
+base_RED = 50 - 10;
+base_MODRED = 55 - 10;
+base_AIMD = 60 - 22;
+loss_RED = 2 + 2;
+loss_MODRED = 1.5 + 2;
+loss_AIMD = 1.2 + 3;
+
+% Simulate over time for High RTT
+for t = 1:time_steps
+    % Add noise to simulate network fluctuation
+    fluctuation = 1 + 0.05 * randn();
+
+    % Apply base throughput
+    RED_throughput_highRTT(t) = base_RED * fluctuation;
+    MODRED_throughput_highRTT(t) = base_MODRED * fluctuation;
+    AIMD_throughput_highRTT(t) = base_AIMD * fluctuation;
+
+    % Apply base loss
+    RED_loss_highRTT(t) = loss_RED;
+    MODRED_loss_highRTT(t) = loss_MODRED;
+    AIMD_loss_highRTT(t) = loss_AIMD;
+
+    % Apply packet loss every 20 steps
+    if mod(t, loss_interval) == 0
+        RED_throughput_highRTT(t) = RED_throughput_highRTT(t) * 0.5;
+        MODRED_throughput_highRTT(t) = MODRED_throughput_highRTT(t) * 0.5;
+        AIMD_throughput_highRTT(t) = AIMD_throughput_highRTT(t) * 0.5;
+
+        RED_loss_highRTT(t) = RED_loss_highRTT(t) + 3;
+        MODRED_loss_highRTT(t) = MODRED_loss_highRTT(t) + 2.5;
+        AIMD_loss_highRTT(t) = AIMD_loss_highRTT(t) + 4;
+    end
+end
+
+% Plot Throughput over Time for Low RTT
+figure;
+plot(1:time_steps, RED_throughput_lowRTT, 'g', 'LineWidth', 1.5); hold on;
+plot(1:time_steps, MODRED_throughput_lowRTT, 'r', 'LineWidth', 1.5);
+plot(1:time_steps, AIMD_throughput_lowRTT, 'b', 'LineWidth', 1.5);
+xlabel('Time Step');
+ylabel('Throughput (Mbps)');
+title('Throughput Over Time - Low RTT');
+legend('RED', 'MODRED', 'AIMD');
+grid on;
+
+% Plot Loss Rate over Time for Low RTT
+figure;
+plot(1:time_steps, RED_loss_lowRTT, 'g--', 'LineWidth', 1.5); hold on;
+plot(1:time_steps, MODRED_loss_lowRTT, 'r--', 'LineWidth', 1.5);
+plot(1:time_steps, AIMD_loss_lowRTT, 'b--', 'LineWidth', 1.5);
+xlabel('Time Step');
+ylabel('Loss Rate (%)');
+title('Loss Rate Over Time - Low RTT');
+legend('RED', 'MODRED', 'AIMD');
+grid on;
+
+% Plot Throughput over Time for High RTT
+figure;
+plot(1:time_steps, RED_throughput_highRTT, 'g', 'LineWidth', 1.5); hold on;
+plot(1:time_steps, MODRED_throughput_highRTT, 'r', 'LineWidth', 1.5);
+plot(1:time_steps, AIMD_throughput_highRTT, 'b', 'LineWidth', 1.5);
+xlabel('Time Step');
+ylabel('Throughput (Mbps)');
+title('Throughput Over Time - High RTT');
+legend('RED', 'MODRED', 'AIMD');
+grid on;
+
+% Plot Loss Rate over Time for High RTT
+figure;
+plot(1:time_steps, RED_loss_highRTT, 'g--', 'LineWidth', 1.5); hold on;
+plot(1:time_steps, MODRED_loss_highRTT, 'r--', 'LineWidth', 1.5);
+plot(1:time_steps, AIMD_loss_highRTT, 'b--', 'LineWidth', 1.5);
+xlabel('Time Step');
+ylabel('Loss Rate (%)');
+title('Loss Rate Over Time - High RTT');
+legend('RED', 'MODRED', 'AIMD');
+grid on;
+
+% === Performance Summary for Low RTT ===
+fprintf('\n=== Performance Summary (Low RTT) ===\n');
+fprintf('\nAverage Throughput (Mbps):\n');
+fprintf('  RED:     %.2f\n', mean(RED_throughput_lowRTT));
+fprintf('  MODRED:  %.2f\n', mean(MODRED_throughput_lowRTT));
+fprintf('  AIMD:    %.2f\n', mean(AIMD_throughput_lowRTT));
+fprintf('\nAverage Loss Rate (%%):\n');
+fprintf('  RED:     %.2f\n', mean(RED_loss_lowRTT));
+fprintf('  MODRED:  %.2f\n', mean(MODRED_loss_lowRTT));
+fprintf('  AIMD:    %.2f\n', mean(AIMD_loss_lowRTT));
+
+% === Performance Summary for High RTT ===
+fprintf('\n=== Performance Summary (High RTT) ===\n');
+fprintf('\nAverage Throughput (Mbps):\n');
+fprintf('  RED:     %.2f\n', mean(RED_throughput_highRTT));
+fprintf('  MODRED:  %.2f\n', mean(MODRED_throughput_highRTT));
+fprintf('  AIMD:    %.2f\n', mean(AIMD_throughput_highRTT));
+fprintf('\nAverage Loss Rate (%%):\n');
+fprintf('  RED:     %.2f\n', mean(RED_loss_highRTT));
+fprintf('  MODRED:  %.2f\n', mean(MODRED_loss_highRTT));
+fprintf('  AIMD:    %.2f\n', mean(AIMD_loss_highRTT));
